@@ -1,0 +1,15 @@
+- increase and decrease quantity not working properly
+    - updating the state in localstorage correctly but not on UI
+    - needs refresh to update it
+
+- today's tasks
+
+- implement register
+1. Add user to the local storge if not already there (email must be different)
+
+- implement login
+2. To implement we can map through the localstorage array and match each entries
+    - match email & password
+
+- create checkout page (take reference qazi's amazon clone)
+    - we can use the same cart array to checkout
