@@ -21,6 +21,9 @@ function App() {
     }
   };
 
+  // user logged in or not
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+
   // defining cart array
   const [cartArray, setCartArray] = useState(getLocalStorageData());
 
@@ -30,19 +33,23 @@ function App() {
 
   // add to cart
   const addToCart = (prod) => {
-    // first it will check if the product is already in cart and in that case it will only increase the quantity of product
-    const prodObj = cartArray.find((product) => product.id === prod.id);
-    if (prodObj) {
-      addQty(prod, prod.id);
-      alert("Item already in the cart, Quantity increased by +1.");
+    if (userLoggedIn) {
+      // first it will check if the product is already in cart and in that case it will only increase the quantity of product
+      const prodObj = cartArray.find((product) => product.id === prod.id);
+      if (prodObj) {
+        addQty(prod, prod.id);
+        alert("Item already in the cart, Quantity increased by +1.");
+      }
+      // if product is not in cart already, it will add it to the cart
+      else {
+        setCartArray([...cartArray, prod]);
+        prod.cartQty = prod.cartQty + 1;
+      }
+      // this will update the local storage
+      localStorage.setItem("Cart", JSON.stringify(cartArray));
+    } else {
+      alert("Log in / Register to add product to cart.");
     }
-    // if product is not in cart already, it will add it to the cart
-    else {
-      setCartArray([...cartArray, prod]);
-      prod.cartQty = prod.cartQty + 1;
-    }
-    // this will update the local storage
-    localStorage.setItem("Cart", JSON.stringify(cartArray));
   };
 
   // remove item from cart
@@ -96,10 +103,19 @@ function App() {
                 removeFromCart={removeFromCart}
                 addQty={addQty}
                 removeQty={removeQty}
+                userLoggedIn={userLoggedIn}
               />
             }
           ></Route>
-          <Route path="/login" element={<Login />}></Route>
+          <Route
+            path="/login"
+            element={
+              <Login
+                userLoggedIn={userLoggedIn}
+                setUserLoggedIn={setUserLoggedIn}
+              />
+            }
+          ></Route>
           <Route path="/register" element={<Register />}></Route>
         </Routes>
       </BrowserRouter>

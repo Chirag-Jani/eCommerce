@@ -1,24 +1,59 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-function Login() {
+function Login(props) {
+  const getLocalStorageData = () => {
+    let registeredUsers = JSON.parse(localStorage.getItem("UserCollection"));
+    if (registeredUsers) {
+      return registeredUsers;
+    } else {
+      return [];
+    }
+  };
+
+  const [avalAccounts, setAvalAccounts] = useState(getLocalStorageData());
+
   const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
   });
 
   const userInput = (e) => {
-    // console.log(e.target.value);
-    // console.log(e.target.name);
-    setUserDetails({ [e.target.name]: e.target.value });
+    const name = e.target.name;
+    const value = e.target.value;
+    setUserDetails((prev) => {
+      if (name === "password") {
+        return {
+          email: prev.email,
+          password: value,
+        };
+      } else {
+        return {
+          email: value,
+          password: prev.password,
+        };
+      }
+    });
   };
 
+  const navigate = useNavigate();
   const login = () => {
-    setUserDetails({
-      email: "",
-      password: "",
+    avalAccounts.find((user) => {
+      if (
+        user.email === userDetails.email &&
+        user.password === userDetails.password
+      ) {
+        console.log("User found");
+        setUserDetails({
+          email: "",
+          password: "",
+        });
+        navigate("/");
+        props.setUserLoggedIn(true);
+      } else {
+        console.log("User not found");
+      }
     });
-    console.log("Logged in.");
   };
 
   return (
@@ -40,14 +75,15 @@ function Login() {
                 <div className="form-outline mb-4">
                   <input
                     type="email"
-                    id="form3Example3"
+                    id="emailInput"
                     className="form-control form-control-lg"
                     placeholder="Enter a valid email address"
                     onChange={userInput}
                     name="email"
                     autoComplete="off"
+                    value={userDetails.email}
                   />
-                  <label className="form-label mt-2" htmlFor="form3Example3">
+                  <label className="form-label mt-2" htmlFor="emailInput">
                     Email address
                   </label>
                 </div>
@@ -55,14 +91,15 @@ function Login() {
                 <div className="form-outline mb-3">
                   <input
                     type="password"
-                    id="form3Example4"
+                    id="passwordInput"
                     className="form-control form-control-lg"
                     placeholder="Enter password"
                     onChange={userInput}
                     name="password"
                     autoComplete="off"
+                    value={userDetails.password}
                   />
-                  <label className="form-label mt-2" htmlFor="form3Example4">
+                  <label className="form-label mt-2" htmlFor="passwordInput">
                     Password
                   </label>
                 </div>
