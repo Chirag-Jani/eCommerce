@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Router } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Register() {
   // it will get data from local storage and will set userCollection (it is down there in the usestate)

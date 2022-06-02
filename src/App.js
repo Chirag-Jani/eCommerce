@@ -24,6 +24,29 @@ function App() {
   // user logged in or not
   const [userLoggedIn, setUserLoggedIn] = useState(false);
 
+  // state for current user
+  const getCurrUser = () => {
+    let cUser = JSON.parse(localStorage.getItem("CurrUser"));
+    if (cUser) {
+      return cUser;
+    } else {
+      return {};
+    }
+  };
+  const [currUser, setCurrUser] = useState(getCurrUser());
+
+  // logging user out
+  const logout = () => {
+    setUserLoggedIn(false);
+    setCurrUser(() => {
+      return {
+        email: "User",
+        password: "Demo",
+      };
+    });
+    localStorage.setItem("CurrUser", JSON.stringify(currUser));
+  };
+
   // defining cart array
   const [cartArray, setCartArray] = useState(getLocalStorageData());
 
@@ -89,7 +112,12 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar cartItems={cartArray.length} />
+        <Navbar
+          cartItems={cartArray.length}
+          userLoggedIn={userLoggedIn}
+          logout={logout}
+          currUser={currUser}
+        />
         <Routes>
           <Route
             path="/"
@@ -104,6 +132,7 @@ function App() {
                 addQty={addQty}
                 removeQty={removeQty}
                 userLoggedIn={userLoggedIn}
+                currUser={currUser}
               />
             }
           ></Route>
@@ -113,6 +142,7 @@ function App() {
               <Login
                 userLoggedIn={userLoggedIn}
                 setUserLoggedIn={setUserLoggedIn}
+                setCurrUser={setCurrUser}
               />
             }
           ></Route>

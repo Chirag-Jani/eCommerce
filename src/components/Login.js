@@ -11,7 +11,8 @@ function Login(props) {
     }
   };
 
-  const [avalAccounts, setAvalAccounts] = useState(getLocalStorageData());
+  // setAvalAccounts has been removed from the below state
+  const [avalAccounts] = useState(getLocalStorageData());
 
   const [userDetails, setUserDetails] = useState({
     email: "",
@@ -44,12 +45,14 @@ function Login(props) {
         user.password === userDetails.password
       ) {
         console.log("User found");
+        navigate("/");
+        props.setUserLoggedIn(true);
+        props.setCurrUser(userDetails);
+        localStorage.setItem("CurrUser", JSON.stringify(userDetails));
         setUserDetails({
           email: "",
           password: "",
         });
-        navigate("/");
-        props.setUserLoggedIn(true);
       } else {
         console.log("User not found");
       }

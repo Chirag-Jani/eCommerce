@@ -4,8 +4,9 @@ import { Link } from "react-router-dom";
 function Cart(props) {
   return (
     <div className="container row d-flex m-auto pt-5">
-      <h1 className="text-center m-5">Your cart:</h1>
-
+      <h1 className="text-center m-5">
+        Hello {props.userLoggedIn ? props.currUser.email : "User"}
+      </h1>
       {props.userLoggedIn ? (
         props.cartArray.map((product) => {
           return (
