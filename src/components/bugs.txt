@@ -2,6 +2,8 @@
     - updating the state in localstorage correctly but not on UI
     - needs refresh to update it
 
+- reset the user input field after adding user to the usercollection
+
 - today's tasks
 
 - implement register

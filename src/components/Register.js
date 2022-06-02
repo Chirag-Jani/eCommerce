@@ -1,48 +1,99 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Router } from "react-router-dom";
 
-function Login() {
+function Register() {
+  // it will get data from local storage and will set userCollection (it is down there in the usestate)
+  const getLocalStorageData = () => {
+    let registeredUsers = JSON.parse(localStorage.getItem("UserCollection"));
+    if (registeredUsers) {
+      return registeredUsers;
+    } else {
+      return [];
+    }
+  };
+
+  // state to handle user input
   const [userDetails, setUserDetails] = useState({
-    fname: "",
-    lname: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
   });
 
-  const [userCollection, setUserCollection] = useState([]);
+  // array of objects for registered users
+  const [userCollection, setUserCollection] = useState(getLocalStorageData());
 
+  // it will be called each time userCollection is updated
   useEffect(() => {
     localStorage.setItem("UserCollection", JSON.stringify(userCollection));
   }, [userCollection]);
 
+  // handling function to handle user input
   const userInput = (e) => {
-    // console.log(e.target.value);
-    // console.log(e.target.name);
-    setUserDetails({ [e.target.name]: e.target.value });
+    const name = e.target.name;
+    const value = e.target.value;
+
+    // setting state for user input
+    setUserDetails((prev) => {
+      if (name === "firstName") {
+        return {
+          firstName: value,
+          lastName: prev.lastName,
+          email: prev.email,
+          password: prev.password,
+        };
+      } else if (name === "lastName") {
+        return {
+          firstName: prev.firstName,
+          lastName: value,
+          email: prev.email,
+          password: prev.password,
+        };
+      } else if (name === "email") {
+        return {
+          firstName: prev.firstName,
+          lastName: prev.lastName,
+          email: value,
+          password: prev.password,
+        };
+      } else {
+        return {
+          firstName: prev.firstName,
+          lastName: prev.lastName,
+          email: prev.email,
+          password: value,
+        };
+      }
+    });
   };
 
   const register = () => {
     // adding new user to the userlist
-    console.log(userDetails.fname);
-    console.log(userDetails.lname);
-    console.log(userDetails.email);
-    console.log(userDetails.password);
-
-    // updating local storage
-    // localStorage.setItem("Registered Users", JSON.stringify(userDetails));
-
+    const email = userDetails.email;
+    const check = userCollection.find((user) => user.email === email);
+    // check for the user with same email
+    if (check) {
+      alert("User with the same email already exist.");
+    }
+    // if there is no user with the same email, it will add it to the list
+    else {
+      setUserCollection([...userCollection, userDetails]);
+      // updating local storage
+      localStorage.setItem("UserCollection", JSON.stringify(userCollection));
+    }
     // resetting input fields
     setUserDetails({
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
-      fname: "",
-      lname: "",
     });
-    console.log("Registered.");
+
+    // Now redirect user to the homepage after registeration
   };
 
   return (
-    <div className="container mt-5 pt-5">
+    <div className="container pt-5">
       <section className="vh-100">
         <div className="container-fluid h-custom">
           <div className="row d-flex justify-content-center align-items-center h-100">
@@ -55,42 +106,40 @@ function Login() {
             </div>
             <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
               <form>
-                <h2 className="my-5">Register new user:</h2>
+                <h2 className="mt-5 mb-4">Register new user:</h2>
                 {/* Full Name input */}
-                <div className="form-outline mb-4 row">
-                  <div className="col">
-                    <input
-                      type="email"
-                      id="firstNameInput"
-                      className="form-control form-control-lg"
-                      placeholder="Enter First Name"
-                      onChange={userInput}
-                      name="fname"
-                      autoComplete="off"
-                      value={userDetails.fname}
-                    />
-                    <label className="form-label mt-2" htmlFor="firstNameInput">
-                      First Name
-                    </label>
-                  </div>
-                  <div className="col">
-                    <input
-                      type="email"
-                      id="lastNameInput"
-                      className="form-control form-control-lg"
-                      placeholder="Enter Last Name"
-                      onChange={userInput}
-                      name="lname"
-                      autoComplete="off"
-                      value={userDetails.lname}
-                    />
-                    <label className="form-label mt-2" htmlFor="lastNameInput">
-                      Last Name
-                    </label>
-                  </div>
+                <div className="form-outline mb-3">
+                  <input
+                    type="text"
+                    id="firstNameInput"
+                    className="form-control form-control-lg"
+                    placeholder="Enter First Name"
+                    onChange={userInput}
+                    name="firstName"
+                    autoComplete="off"
+                    value={userDetails.firstName}
+                  />
+                  <label className="form-label mt-2" htmlFor="firstNameInput">
+                    First Name
+                  </label>
+                </div>
+                <div className="form-outline mb-3">
+                  <input
+                    type="text"
+                    id="lastNameInput"
+                    className="form-control form-control-lg"
+                    placeholder="Enter Last Name"
+                    onChange={userInput}
+                    name="lastName"
+                    autoComplete="off"
+                    value={userDetails.lastName}
+                  />
+                  <label className="form-label mt-2" htmlFor="lastNameInput">
+                    Last Name
+                  </label>
                 </div>
                 {/* Email input */}
-                <div className="form-outline mb-4">
+                <div className="form-outline mb-3">
                   <input
                     type="email"
                     id="emailInput"
@@ -126,7 +175,7 @@ function Login() {
                     type="button"
                     className="btn btn-primary btn-lg"
                     style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
-                    onClick={() => register()}
+                    onClick={register}
                   >
                     Register
                   </button>
@@ -146,4 +195,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
