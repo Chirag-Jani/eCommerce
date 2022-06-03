@@ -39,24 +39,32 @@ function Login(props) {
 
   const navigate = useNavigate();
   const login = () => {
-    avalAccounts.find((user) => {
-      if (
-        user.email === userDetails.email &&
-        user.password === userDetails.password
-      ) {
-        console.log("User found");
-        navigate("/");
-        props.setUserLoggedIn(true);
-        props.setCurrUser(userDetails);
-        localStorage.setItem("CurrUser", JSON.stringify(userDetails));
-        setUserDetails({
-          email: "",
-          password: "",
-        });
-      } else {
-        console.log("User not found");
-      }
-    });
+    const emailValid = userDetails.email.match(
+      /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i
+    );
+
+    if (emailValid) {
+      avalAccounts.find((user) => {
+        if (
+          user.email === userDetails.email &&
+          user.password === userDetails.password
+        ) {
+          console.log("User found");
+          navigate("/");
+          props.setUserLoggedIn(true);
+          props.setCurrUser(userDetails);
+          localStorage.setItem("CurrUser", JSON.stringify(userDetails));
+          setUserDetails({
+            email: "",
+            password: "",
+          });
+        } else {
+          console.log("User not found");
+        }
+      });
+    } else {
+      alert("Enter a valid email id.");
+    }
   };
 
   return (

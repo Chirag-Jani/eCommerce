@@ -146,7 +146,16 @@ function App() {
               />
             }
           ></Route>
-          <Route path="/register" element={<Register />}></Route>
+          <Route
+            path="/register"
+            element={
+              <Register
+                userLoggedIn={userLoggedIn}
+                setUserLoggedIn={setUserLoggedIn}
+                setCurrUser={setCurrUser}
+              />
+            }
+          ></Route>
         </Routes>
       </BrowserRouter>
     </div>

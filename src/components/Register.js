@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-function Register() {
+function Register(props) {
+  //
+  const navigate = useNavigate();
   // it will get data from local storage and will set userCollection (it is down there in the usestate)
   const getLocalStorageData = () => {
     let registeredUsers = JSON.parse(localStorage.getItem("UserCollection"));
@@ -71,23 +73,37 @@ function Register() {
     // adding new user to the userlist
     const email = userDetails.email;
     const check = userCollection.find((user) => user.email === email);
-    // check for the user with same email
-    if (check) {
-      alert("User with the same email already exist.");
+    const emailValid = userDetails.email.match(
+      /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i
+    );
+    if (emailValid) {
+      if (!check) {
+        // if there is no user with the same email, it will add it to the list
+        setUserCollection([...userCollection, userDetails]);
+        // updating local storage
+        localStorage.setItem("UserCollection", JSON.stringify(userCollection));
+      }
+      // if user already exist
+      else {
+        alert("User with the same email already exist.");
+      }
+
+      // logging user in
+      navigate("/");
+      props.setUserLoggedIn(true);
+      props.setCurrUser(userDetails);
+      localStorage.setItem("CurrUser", JSON.stringify(userDetails));
+
+      // resetting input fields
+      setUserDetails({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+      });
+    } else {
+      alert("Please enter a valid email id.");
     }
-    // if there is no user with the same email, it will add it to the list
-    else {
-      setUserCollection([...userCollection, userDetails]);
-      // updating local storage
-      localStorage.setItem("UserCollection", JSON.stringify(userCollection));
-    }
-    // resetting input fields
-    setUserDetails({
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-    });
 
     // Now redirect user to the homepage after registeration
   };
