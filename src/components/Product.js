@@ -14,7 +14,7 @@ function Product(props) {
               <div className="mx-2">
                 <img
                   src={product.urlToImage}
-                  style={{ width: "150px", height: "fit-content" }}
+                  style={{ width: "200px", height: "300px" }}
                   alt="PImage"
                 />
               </div>

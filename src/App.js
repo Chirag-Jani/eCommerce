@@ -52,6 +52,7 @@ function App() {
 
   // defining cart array
   const [cartArray, setCartArray] = useState(getLocalStorageDataCart());
+  // const [cartArray, setCartArray] = useState([getCurrUser().cartItems]);
 
   // add to cart
   const addToCart = (prod) => {
@@ -176,7 +177,7 @@ function App() {
             password: "",
           });
         } else {
-          alert("User not found");
+          // alert("User not found");
         }
       });
     }
@@ -199,6 +200,7 @@ function App() {
     lastName: "",
     email: "",
     password: "",
+    cartItems: [],
   });
 
   const [userCollection, setUserCollection] = useState(
@@ -218,6 +220,7 @@ function App() {
           lastName: prev.lastName,
           email: prev.email,
           password: prev.password,
+          cartItems: prev.cartItems,
         };
       } else if (name === "lastName") {
         return {
@@ -225,6 +228,7 @@ function App() {
           lastName: value,
           email: prev.email,
           password: prev.password,
+          cartItems: prev.cartItems,
         };
       } else if (name === "email") {
         return {
@@ -232,6 +236,7 @@ function App() {
           lastName: prev.lastName,
           email: value,
           password: prev.password,
+          cartItems: prev.cartItems,
         };
       } else {
         return {
@@ -239,6 +244,7 @@ function App() {
           lastName: prev.lastName,
           email: prev.email,
           password: value,
+          cartItems: prev.cartItems,
         };
       }
     });
@@ -305,7 +311,7 @@ function App() {
         };
       });
     }
-    //
+    // registered users
     localStorage.setItem("UserCollection", JSON.stringify(userCollection));
   }, [cartArray, userCollection]);
   return (

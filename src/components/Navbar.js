@@ -72,7 +72,7 @@ function Navbar(props) {
                 value={searchInput}
                 onChange={handleSearchInput}
               />
-              <button className="btn btn-outline-success" onClick={searchItem}>
+              <button className="btn btn-outline-primary" onClick={searchItem}>
                 Search
               </button>
             </form>
@@ -99,8 +99,8 @@ function Navbar(props) {
                   <h5 className="text-white my-2 p-3">
                     {/* <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="22"
-                      height="22"
+                      width="30"
+                      height="30"
                       fill="currentColor"
                       className="bi bi-person-circle mx-2"
                       viewBox="0 0 16 16"

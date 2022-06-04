@@ -8,11 +8,13 @@
     - updating the state in localstorage correctly but not on UI
     - needs refresh to update it
 
-4. Search functionality
+- Search functionality 
+    - it is printing on colsole if product is there or not
+    - requires full title to Search
 
-5. different carts for all the users 
+- different carts for all the users 
     - currently one same cart is being served to all the users
     - aana mate user register karela che e array of object ma bijo sub object add kari devar cart naam no and state thi i think thai jase
 
-6. create checkout page (take reference qazi's amazon clone)
+- create checkout page (take reference qazi's amazon clone)
     - we can use the same cart array to checkout

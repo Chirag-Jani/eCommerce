@@ -16,14 +16,14 @@ function Cart(props) {
                 <div className="mx-2">
                   <img
                     src={product.urlToImage}
-                    style={{ width: "150px", height: "fit-content" }}
+                    style={{ width: "200px", height: "300px" }}
                     alt="PImage"
                   />
                 </div>
                 <div>
                   <div className="mx-2">
                     <h5>{product.title}</h5>
-                    <p>{product.description.slice(0, 50)}...</p>
+                    <p>{product.description.slice(0, 50)}</p>
                     <h5>$ {product.price}</h5>
                     <div className="d-flex">
                       {Array(product.rating)
