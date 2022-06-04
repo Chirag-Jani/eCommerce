@@ -4,7 +4,7 @@
 
 1. on refresh user should not be logged out
 
-2. Improve UI
+2. Improve UI - Done
 
 3. increase and decrease quantity not working properly
     - updating the state in localstorage correctly but not on UI

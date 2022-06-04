@@ -27,7 +27,7 @@ function Product(props) {
                     {Array(product.rating)
                       .fill()
                       .map((_, i) => (
-                        <p>⭐</p>
+                        <p key={i}>⭐</p>
                       ))}
                   </div>
                 </div>

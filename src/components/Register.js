@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Register(props) {
-  //
+  // to navigate on register
   const navigate = useNavigate();
   // it will get data from local storage and will set userCollection (it is down there in the usestate)
   const getLocalStorageData = () => {

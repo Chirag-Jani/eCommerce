@@ -4,9 +4,7 @@ import { Link } from "react-router-dom";
 function Cart(props) {
   return (
     <div className="container row d-flex m-auto pt-5">
-      <h1 className="text-center m-5 pt-5">
-        Hello {props.userLoggedIn ? props.currUser.email : "User"}
-      </h1>
+      <h1 className="text-center m-5 pt-5">Hello {props.currUser.email}</h1>
       {props.userLoggedIn ? (
         props.cartArray.map((product) => {
           return (
@@ -30,8 +28,8 @@ function Cart(props) {
                     <div className="d-flex">
                       {Array(product.rating)
                         .fill()
-                        .map(() => (
-                          <p>⭐</p>
+                        .map((_, i) => (
+                          <p key={i}>⭐</p>
                         ))}
                     </div>
                   </div>

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login(props) {
-  const getLocalStorageData = () => {
+  // this is getting local storage data to map and find if user is already there
+  const getLocalStorageDataUserCollection = () => {
     let registeredUsers = JSON.parse(localStorage.getItem("UserCollection"));
     if (registeredUsers) {
       return registeredUsers;
@@ -12,13 +13,15 @@ function Login(props) {
   };
 
   // setAvalAccounts has been removed from the below state
-  const [avalAccounts] = useState(getLocalStorageData());
+  const [avalAccounts] = useState(getLocalStorageDataUserCollection());
 
+  // state to handle user input
   const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
   });
 
+  // handler function for user input
   const userInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -37,12 +40,16 @@ function Login(props) {
     });
   };
 
+  // to navigate to home after loggin in
   const navigate = useNavigate();
+  // login function
   const login = () => {
+    // pattern to validate email
     const emailValid = userDetails.email.match(
       /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i
     );
 
+    // if email is valid then only move furether in checking in local storage
     if (emailValid) {
       avalAccounts.find((user) => {
         if (
@@ -62,7 +69,9 @@ function Login(props) {
           console.log("User not found");
         }
       });
-    } else {
+    }
+    // alert if email is not valid
+    else {
       alert("Enter a valid email id.");
     }
   };

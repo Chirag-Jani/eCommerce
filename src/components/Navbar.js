@@ -46,11 +46,7 @@ function Navbar(props) {
             {/* Login  */}
             <div className="nav-item text-white m-auto d-flex flex-sm-column flex-column flex-md-row">
               <div className="p-3">
-                {!props.userLoggedIn ? (
-                  <Link to="/login" className="btn text-white btn-primary ms-2">
-                    Log in / Sign up
-                  </Link>
-                ) : (
+                {props.userLoggedIn ? (
                   <div>
                     <button
                       className="btn text-white btn-primary ms-3"
@@ -59,11 +55,15 @@ function Navbar(props) {
                       Logout
                     </button>
                   </div>
+                ) : (
+                  <Link to="/login" className="btn text-white btn-primary ms-2">
+                    Log in / Sign up
+                  </Link>
                 )}
               </div>
               <div>
                 <h5 className="text-white m-2 ms-3 p-3">
-                  Hello {props.userLoggedIn ? props.currUser.email : "User"}
+                  Hello {props.currUser.email}
                 </h5>
               </div>
               {/* cart */}

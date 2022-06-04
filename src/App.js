@@ -12,7 +12,7 @@ function App() {
   const products = productData;
 
   // fetching data from local storage
-  const getLocalStorageData = () => {
+  const getLocalStorageDataCart = () => {
     let cartAval = JSON.parse(localStorage.getItem("Cart"));
     if (cartAval) {
       return cartAval;
@@ -33,20 +33,36 @@ function App() {
       return {};
     }
   };
-  const [currUser, setCurrUser] = useState(getCurrUser());
+
+  // state for currently logged in user
+  const [currUser, setCurrUser] = useState([getCurrUser()]);
 
   // logging user out
-  const logout = () => {
+  const logout = (e) => {
     setUserLoggedIn(false);
     // set curr user for guest
+    currUser.email = "Guest";
+    currUser.password = "None";
+
+    // setting guest user in local storage
     localStorage.setItem("CurrUser", JSON.stringify(currUser));
   };
 
   // defining cart array
-  const [cartArray, setCartArray] = useState(getLocalStorageData());
+  const [cartArray, setCartArray] = useState(getLocalStorageDataCart());
 
   useEffect(() => {
     localStorage.setItem("Cart", JSON.stringify(cartArray));
+    // this is preventing user from getting logged out on refresh
+    if (!currUser.email) {
+      setUserLoggedIn(true);
+      setCurrUser(() => {
+        return {
+          email: JSON.parse(localStorage.getItem("CurrUser")).email,
+          password: JSON.parse(localStorage.getItem("CurrUser")).password,
+        };
+      });
+    }
   }, [cartArray]);
 
   // add to cart
