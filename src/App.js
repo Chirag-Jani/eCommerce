@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Cart from "./components/Cart";
+import Footer from "./components/Footer";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import productData from "./components/productData.json";
 import ProductList from "./components/ProductList";
 import Register from "./components/Register";
+import Profile from "./Profile";
 
 function App() {
   // defining product array || we can use an API as well for data
@@ -166,7 +168,6 @@ function App() {
           user.email === userDetails.email &&
           user.password === userDetails.password
         ) {
-          console.log("User found");
           setUserLoggedIn(true);
           setCurrUser(userDetails);
           localStorage.setItem("CurrUser", JSON.stringify(userDetails));
@@ -175,7 +176,7 @@ function App() {
             password: "",
           });
         } else {
-          console.log("User not found");
+          alert("User not found");
         }
       });
     }
@@ -256,13 +257,14 @@ function App() {
         setUserCollection([...userCollection, userDetailsRegistration]);
         // updating local storage
         localStorage.setItem("UserCollection", JSON.stringify(userCollection));
-        // logging user in
-        setUserLoggedIn(true);
         setCurrUser(userDetailsRegistration);
         localStorage.setItem(
           "CurrUser",
           JSON.stringify(userDetailsRegistration)
         );
+
+        // logging user in
+        setUserLoggedIn(true);
 
         // resetting input fields
         setUserDetailsRegistration({
@@ -314,6 +316,7 @@ function App() {
           userLoggedIn={userLoggedIn}
           logout={logout}
           currUser={currUser}
+          listOfProducts={productData}
         />
         <Routes>
           <Route
@@ -355,7 +358,9 @@ function App() {
               />
             }
           ></Route>
+          <Route path="/profile" element={<Profile />}></Route>
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );

@@ -16,7 +16,7 @@ function Cart(props) {
                 <div className="mx-2">
                   <img
                     src={product.urlToImage}
-                    style={{ width: "fit-content", height: "300px" }}
+                    style={{ width: "150px", height: "fit-content" }}
                     alt="PImage"
                   />
                 </div>

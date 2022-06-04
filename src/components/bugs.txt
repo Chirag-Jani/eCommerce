@@ -2,17 +2,17 @@
 
 // Tasks Priority wise
 
-1.
+- Navigation after registration (on hold)
 
-2.
-
-3. increase and decrease quantity not working properly
+- increase and decrease quantity not working properly
     - updating the state in localstorage correctly but not on UI
     - needs refresh to update it
 
-4. different carts for all the users 
+4. Search functionality
+
+5. different carts for all the users 
     - currently one same cart is being served to all the users
     - aana mate user register karela che e array of object ma bijo sub object add kari devar cart naam no and state thi i think thai jase
 
-5. create checkout page (take reference qazi's amazon clone)
+6. create checkout page (take reference qazi's amazon clone)
     - we can use the same cart array to checkout
