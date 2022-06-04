@@ -38,12 +38,7 @@ function App() {
   // logging user out
   const logout = () => {
     setUserLoggedIn(false);
-    setCurrUser(() => {
-      return {
-        email: "User",
-        password: "Demo",
-      };
-    });
+    // set curr user for guest
     localStorage.setItem("CurrUser", JSON.stringify(currUser));
   };
 

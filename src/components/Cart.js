@@ -4,25 +4,25 @@ import { Link } from "react-router-dom";
 function Cart(props) {
   return (
     <div className="container row d-flex m-auto pt-5">
-      <h1 className="text-center m-5">
+      <h1 className="text-center m-5 pt-5">
         Hello {props.userLoggedIn ? props.currUser.email : "User"}
       </h1>
       {props.userLoggedIn ? (
         props.cartArray.map((product) => {
           return (
             <div
-              className="border border-primary my-2 w-50 p-2"
+              className="col border border-secondary p-1 m-2 d-flex"
               key={product.id}
             >
-              <div className="w-100 align-middle ">
-                <div className="d-flex m-3">
-                  <div className="mx-2">
-                    <img
-                      src={product.urlToImage}
-                      style={{ width: "fit-content", height: "300px" }}
-                      alt="PImage"
-                    />
-                  </div>
+              <div className="w-fit col d-flex m-3">
+                <div className="mx-2">
+                  <img
+                    src={product.urlToImage}
+                    style={{ width: "fit-content", height: "300px" }}
+                    alt="PImage"
+                  />
+                </div>
+                <div>
                   <div className="mx-2">
                     <h5>{product.title}</h5>
                     <p>{product.description.slice(0, 50)}...</p>
@@ -34,13 +34,15 @@ function Cart(props) {
                           <p>⭐</p>
                         ))}
                     </div>
+                  </div>
+                  <div>
                     <button
                       className="btn btn-danger"
                       onClick={() => props.removeFromCart(product.id)}
                     >
                       Remove
                     </button>
-                    <div className="mt-4">
+                    <div className="mt-4  d-flex">
                       <button
                         className="btn btn-secondary mx-3 "
                         onClick={() => props.removeQty(product, product.id)}
@@ -75,7 +77,7 @@ function Cart(props) {
           </h2>
         </div>
       )}
-      <div>
+      <div className="mt-5">
         <h2>
           Total: $
           {props.userLoggedIn
