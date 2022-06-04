@@ -2,9 +2,9 @@
 
 // Tasks Priority wise
 
-1. on refresh user should not be logged out
+1.
 
-2. Improve UI - Done
+2.
 
 3. increase and decrease quantity not working properly
     - updating the state in localstorage correctly but not on UI

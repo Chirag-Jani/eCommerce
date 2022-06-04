@@ -1,111 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Register(props) {
-  // to navigate on register
+  // destructring props to get register funciton
+  const { register } = props;
+
+  // to navigate to home after loggin in
   const navigate = useNavigate();
-  // it will get data from local storage and will set userCollection (it is down there in the usestate)
-  const getLocalStorageData = () => {
-    let registeredUsers = JSON.parse(localStorage.getItem("UserCollection"));
-    if (registeredUsers) {
-      return registeredUsers;
-    } else {
-      return [];
-    }
-  };
 
-  // state to handle user input
-  const [userDetails, setUserDetails] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-  });
-
-  // array of objects for registered users
-  const [userCollection, setUserCollection] = useState(getLocalStorageData());
-
-  // it will be called each time userCollection is updated
-  useEffect(() => {
-    localStorage.setItem("UserCollection", JSON.stringify(userCollection));
-  }, [userCollection]);
-
-  // handling function to handle user input
-  const userInput = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    // setting state for user input
-    setUserDetails((prev) => {
-      if (name === "firstName") {
-        return {
-          firstName: value,
-          lastName: prev.lastName,
-          email: prev.email,
-          password: prev.password,
-        };
-      } else if (name === "lastName") {
-        return {
-          firstName: prev.firstName,
-          lastName: value,
-          email: prev.email,
-          password: prev.password,
-        };
-      } else if (name === "email") {
-        return {
-          firstName: prev.firstName,
-          lastName: prev.lastName,
-          email: value,
-          password: prev.password,
-        };
-      } else {
-        return {
-          firstName: prev.firstName,
-          lastName: prev.lastName,
-          email: prev.email,
-          password: value,
-        };
-      }
-    });
-  };
-
-  const register = () => {
-    // adding new user to the userlist
-    const email = userDetails.email;
-    const check = userCollection.find((user) => user.email === email);
-    const emailValid = userDetails.email.match(
-      /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i
-    );
-    if (emailValid) {
-      if (!check) {
-        // if there is no user with the same email, it will add it to the list
-        setUserCollection([...userCollection, userDetails]);
-        // updating local storage
-        localStorage.setItem("UserCollection", JSON.stringify(userCollection));
-      }
-      // if user already exist
-      else {
-        alert("User with the same email already exist.");
-      }
-
-      // logging user in
+  // this will be called on register click
+  const registration = () => {
+    register();
+    if (props.userLoggedIn) {
       navigate("/");
-      props.setUserLoggedIn(true);
-      props.setCurrUser(userDetails);
-      localStorage.setItem("CurrUser", JSON.stringify(userDetails));
-
-      // resetting input fields
-      setUserDetails({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-      });
-    } else {
-      alert("Please enter a valid email id.");
     }
-
-    // Now redirect user to the homepage after registeration
   };
 
   return (
@@ -122,7 +30,7 @@ function Register(props) {
             </div>
             <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
               <form>
-                <h2 className="mt-5 mb-4">Register new user:</h2>
+                <h2 className="mt-5 mb-4 pt-5">Register new user:</h2>
                 {/* Full Name input */}
                 <div className="form-outline mb-3">
                   <input
@@ -130,10 +38,10 @@ function Register(props) {
                     id="firstNameInput"
                     className="form-control form-control-lg"
                     placeholder="Enter First Name"
-                    onChange={userInput}
+                    onChange={props.userInputRegistration}
                     name="firstName"
                     autoComplete="off"
-                    value={userDetails.firstName}
+                    value={props.userDetailsRegistration.firstName}
                   />
                   <label className="form-label mt-2" htmlFor="firstNameInput">
                     First Name
@@ -145,10 +53,10 @@ function Register(props) {
                     id="lastNameInput"
                     className="form-control form-control-lg"
                     placeholder="Enter Last Name"
-                    onChange={userInput}
+                    onChange={props.userInputRegistration}
                     name="lastName"
                     autoComplete="off"
-                    value={userDetails.lastName}
+                    value={props.userDetailsRegistration.lastName}
                   />
                   <label className="form-label mt-2" htmlFor="lastNameInput">
                     Last Name
@@ -161,10 +69,10 @@ function Register(props) {
                     id="emailInput"
                     className="form-control form-control-lg"
                     placeholder="Enter a valid email address"
-                    onChange={userInput}
+                    onChange={props.userInputRegistration}
                     name="email"
                     autoComplete="off"
-                    value={userDetails.email}
+                    value={props.userDetailsRegistration.email}
                   />
                   <label className="form-label mt-2" htmlFor="emailInput">
                     Email address
@@ -177,10 +85,10 @@ function Register(props) {
                     id="passwordInput"
                     className="form-control form-control-lg"
                     placeholder="Enter password"
-                    onChange={userInput}
+                    onChange={props.userInputRegistration}
                     name="password"
                     autoComplete="off"
-                    value={userDetails.password}
+                    value={props.userDetailsRegistration.password}
                   />
                   <label className="form-label mt-2" htmlFor="passwordInput">
                     Password
@@ -191,7 +99,7 @@ function Register(props) {
                     type="button"
                     className="btn btn-primary btn-lg"
                     style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
-                    onClick={register}
+                    onClick={registration}
                   >
                     Register
                   </button>

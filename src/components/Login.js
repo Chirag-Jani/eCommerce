@@ -1,79 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login(props) {
-  // this is getting local storage data to map and find if user is already there
-  const getLocalStorageDataUserCollection = () => {
-    let registeredUsers = JSON.parse(localStorage.getItem("UserCollection"));
-    if (registeredUsers) {
-      return registeredUsers;
-    } else {
-      return [];
-    }
-  };
-
-  // setAvalAccounts has been removed from the below state
-  const [avalAccounts] = useState(getLocalStorageDataUserCollection());
-
-  // state to handle user input
-  const [userDetails, setUserDetails] = useState({
-    email: "",
-    password: "",
-  });
-
-  // handler function for user input
-  const userInput = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setUserDetails((prev) => {
-      if (name === "password") {
-        return {
-          email: prev.email,
-          password: value,
-        };
-      } else {
-        return {
-          email: value,
-          password: prev.password,
-        };
-      }
-    });
-  };
+  // destructring props to get login funciton
+  const { login } = props;
 
   // to navigate to home after loggin in
   const navigate = useNavigate();
-  // login function
-  const login = () => {
-    // pattern to validate email
-    const emailValid = userDetails.email.match(
-      /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i
-    );
 
-    // if email is valid then only move furether in checking in local storage
-    if (emailValid) {
-      avalAccounts.find((user) => {
-        if (
-          user.email === userDetails.email &&
-          user.password === userDetails.password
-        ) {
-          console.log("User found");
-          navigate("/");
-          props.setUserLoggedIn(true);
-          props.setCurrUser(userDetails);
-          localStorage.setItem("CurrUser", JSON.stringify(userDetails));
-          setUserDetails({
-            email: "",
-            password: "",
-          });
-        } else {
-          console.log("User not found");
-        }
-      });
-    }
-    // alert if email is not valid
-    else {
-      alert("Enter a valid email id.");
-    }
+  // this will be called on login click
+  const loggingIn = () => {
+    login();
+    navigate("/");
   };
 
   return (
@@ -98,10 +36,10 @@ function Login(props) {
                     id="emailInput"
                     className="form-control form-control-lg"
                     placeholder="Enter a valid email address"
-                    onChange={userInput}
+                    onChange={props.userInput}
                     name="email"
                     autoComplete="off"
-                    value={userDetails.email}
+                    value={props.userDetails.email}
                   />
                   <label className="form-label mt-2" htmlFor="emailInput">
                     Email address
@@ -114,10 +52,10 @@ function Login(props) {
                     id="passwordInput"
                     className="form-control form-control-lg"
                     placeholder="Enter password"
-                    onChange={userInput}
+                    onChange={props.userInput}
                     name="password"
                     autoComplete="off"
-                    value={userDetails.password}
+                    value={props.userDetails.password}
                   />
                   <label className="form-label mt-2" htmlFor="passwordInput">
                     Password
@@ -145,7 +83,7 @@ function Login(props) {
                     type="button"
                     className="btn btn-primary btn-lg"
                     style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}
-                    onClick={login}
+                    onClick={loggingIn}
                   >
                     Login
                   </button>

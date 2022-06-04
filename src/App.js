@@ -51,20 +51,6 @@ function App() {
   // defining cart array
   const [cartArray, setCartArray] = useState(getLocalStorageDataCart());
 
-  useEffect(() => {
-    localStorage.setItem("Cart", JSON.stringify(cartArray));
-    // this is preventing user from getting logged out on refresh
-    if (!currUser.email) {
-      setUserLoggedIn(true);
-      setCurrUser(() => {
-        return {
-          email: JSON.parse(localStorage.getItem("CurrUser")).email,
-          password: JSON.parse(localStorage.getItem("CurrUser")).password,
-        };
-      });
-    }
-  }, [cartArray]);
-
   // add to cart
   const addToCart = (prod) => {
     if (userLoggedIn) {
@@ -120,6 +106,206 @@ function App() {
     localStorage.setItem("Cart", JSON.stringify(cartArray));
   };
 
+  //
+  //
+  //
+  //
+  //
+  //
+  // Login states and functions
+
+  // this is getting local storage data to map and find if user is already there
+  const getLocalStorageDataUserCollection = () => {
+    let registeredUsers = JSON.parse(localStorage.getItem("UserCollection"));
+    if (registeredUsers) {
+      return registeredUsers;
+    } else {
+      return [];
+    }
+  };
+
+  // setAvalAccounts has been removed from the below state
+  const [avalAccounts] = useState(getLocalStorageDataUserCollection());
+
+  // state to handle user input
+  const [userDetails, setUserDetails] = useState({
+    email: "",
+    password: "",
+  });
+
+  // handler function for user input
+  const userInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setUserDetails((prev) => {
+      if (name === "password") {
+        return {
+          email: prev.email,
+          password: value,
+        };
+      } else {
+        return {
+          email: value,
+          password: prev.password,
+        };
+      }
+    });
+  };
+
+  // login function
+  const login = () => {
+    // pattern to validate email
+    const emailValid = userDetails.email.match(
+      /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i
+    );
+
+    // if email is valid then only move furether in checking in local storage
+    if (emailValid) {
+      avalAccounts.find((user) => {
+        if (
+          user.email === userDetails.email &&
+          user.password === userDetails.password
+        ) {
+          console.log("User found");
+          setUserLoggedIn(true);
+          setCurrUser(userDetails);
+          localStorage.setItem("CurrUser", JSON.stringify(userDetails));
+          setUserDetails({
+            email: "",
+            password: "",
+          });
+        } else {
+          console.log("User not found");
+        }
+      });
+    }
+    // alert if email is not valid
+    else {
+      alert("Enter a valid email id.");
+    }
+  };
+
+  //
+  //
+  //
+  //
+  //
+  // register state and functions
+
+  // state to handle user input
+  const [userDetailsRegistration, setUserDetailsRegistration] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+
+  const [userCollection, setUserCollection] = useState(
+    getLocalStorageDataUserCollection()
+  );
+
+  // handling function to handle user input
+  const userInputRegistration = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    // setting state for user input
+    setUserDetailsRegistration((prev) => {
+      if (name === "firstName") {
+        return {
+          firstName: value,
+          lastName: prev.lastName,
+          email: prev.email,
+          password: prev.password,
+        };
+      } else if (name === "lastName") {
+        return {
+          firstName: prev.firstName,
+          lastName: value,
+          email: prev.email,
+          password: prev.password,
+        };
+      } else if (name === "email") {
+        return {
+          firstName: prev.firstName,
+          lastName: prev.lastName,
+          email: value,
+          password: prev.password,
+        };
+      } else {
+        return {
+          firstName: prev.firstName,
+          lastName: prev.lastName,
+          email: prev.email,
+          password: value,
+        };
+      }
+    });
+  };
+
+  const register = () => {
+    // adding new user to the userlist
+    const email = userDetailsRegistration.email;
+    const check = userCollection.find((user) => user.email === email);
+    const emailValid = userDetailsRegistration.email.match(
+      /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i
+    );
+    if (emailValid) {
+      if (!check) {
+        // if there is no user with the same email, it will add it to the list
+        setUserCollection([...userCollection, userDetailsRegistration]);
+        // updating local storage
+        localStorage.setItem("UserCollection", JSON.stringify(userCollection));
+        // logging user in
+        setUserLoggedIn(true);
+        setCurrUser(userDetailsRegistration);
+        localStorage.setItem(
+          "CurrUser",
+          JSON.stringify(userDetailsRegistration)
+        );
+
+        // resetting input fields
+        setUserDetailsRegistration({
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+        });
+      }
+      // if user already exist
+      else {
+        alert("User with the same email already exist.");
+      }
+    } else {
+      return alert("Please enter a valid email id.");
+    }
+  };
+
+  // useEffect
+  useEffect(() => {
+    localStorage.setItem("Cart", JSON.stringify(cartArray));
+    // this is preventing user from getting logged out on refresh
+    const cEmail = JSON.parse(localStorage.getItem("CurrUser")).email;
+    if (cEmail === "Guest") {
+      setUserLoggedIn(false);
+      setCurrUser(() => {
+        return {
+          email: JSON.parse(localStorage.getItem("CurrUser")).email,
+          password: JSON.parse(localStorage.getItem("CurrUser")).password,
+        };
+      });
+    } else {
+      setUserLoggedIn(true);
+      setCurrUser(() => {
+        return {
+          email: JSON.parse(localStorage.getItem("CurrUser")).email,
+          password: JSON.parse(localStorage.getItem("CurrUser")).password,
+        };
+      });
+    }
+    //
+    localStorage.setItem("UserCollection", JSON.stringify(userCollection));
+  }, [cartArray, userCollection]);
   return (
     <div className="App">
       <BrowserRouter>
@@ -151,9 +337,10 @@ function App() {
             path="/login"
             element={
               <Login
-                userLoggedIn={userLoggedIn}
                 setUserLoggedIn={setUserLoggedIn}
-                setCurrUser={setCurrUser}
+                userInput={userInput}
+                userDetails={userDetails}
+                login={login}
               />
             }
           ></Route>
@@ -162,8 +349,9 @@ function App() {
             element={
               <Register
                 userLoggedIn={userLoggedIn}
-                setUserLoggedIn={setUserLoggedIn}
-                setCurrUser={setCurrUser}
+                userInputRegistration={userInputRegistration}
+                userDetailsRegistration={userDetailsRegistration}
+                register={register}
               />
             }
           ></Route>
