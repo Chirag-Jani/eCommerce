@@ -45,6 +45,9 @@ function App() {
     // set curr user for guest
     currUser.email = "Guest";
     currUser.password = "None";
+    // currUser.firstName = "None";
+    // currUser.lastName = "None";
+    // currUser.cartItems = {};
 
     // setting guest user in local storage
     localStorage.setItem("CurrUser", JSON.stringify(currUser));
@@ -52,7 +55,7 @@ function App() {
 
   // defining cart array
   const [cartArray, setCartArray] = useState(getLocalStorageDataCart());
-  // const [cartArray, setCartArray] = useState([getCurrUser().cartItems]);
+  // const [cartArray, setCartArray] = useState(getCurrUser().cartItems);
 
   // add to cart
   const addToCart = (prod) => {
@@ -65,8 +68,8 @@ function App() {
       }
       // if product is not in cart already, it will add it to the cart
       else {
-        setCartArray([...cartArray, prod]);
         prod.cartQty = prod.cartQty + 1;
+        setCartArray([...cartArray, prod]);
       }
       // this will update the local storage
       localStorage.setItem("Cart", JSON.stringify(cartArray));
@@ -170,7 +173,15 @@ function App() {
           user.password === userDetails.password
         ) {
           setUserLoggedIn(true);
-          setCurrUser(userDetails);
+          setCurrUser(() => {
+            return {
+              email: user.email,
+              password: user.password,
+              // firstName: user.firstName,
+              // lastName: user.lastName,
+              // cartItems: user.cartItems,
+            };
+          });
           localStorage.setItem("CurrUser", JSON.stringify(userDetails));
           setUserDetails({
             email: "",
